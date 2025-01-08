@@ -16,12 +16,18 @@ void Game::Initialize() {
         return;
     }
 
+    SDL_DisplayMode displayMode;
+    SDL_GetCurrentDisplayMode(0, &displayMode);
+
+    windowWidth = displayMode.w;
+    windowHeight = displayMode.h;
+
     window = SDL_CreateWindow(
         "2DGameEngine",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        800,
-        600,
+        windowWidth,
+        windowHeight,
         SDL_WINDOW_BORDERLESS
     );
 
@@ -30,12 +36,18 @@ void Game::Initialize() {
         return;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, 0);
+    renderer = SDL_CreateRenderer(
+        window,
+        -1,
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
+    );
 
     if (!renderer) {
         std::cerr << "Error creating SDL renderer." << std::endl;
         return;
     }
+
+    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 
     isRuning = true;
 }

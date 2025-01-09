@@ -1,20 +1,22 @@
-#include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <glm/glm.hpp>
+
 #include "Game.h"
+#include "Logger.h"
 
 Game::Game() {
     isRuning = false;
-    std::cout << "Game Contructor Called!" << std::endl;
+    Logger::Success("Game Constructor Called!");
 }
+
 Game::~Game() {
-    std::cout << "Game Destructor Called!" << std::endl;
+    Logger::Success("Game Destructor Called!");
 }
 
 void Game::Initialize() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-        std::cerr << "Error initializing SDL." << std::endl;
+        Logger::Error("Error initializing SDL");
         return;
     }
 
@@ -34,7 +36,7 @@ void Game::Initialize() {
     );
 
     if (!window) {
-        std::cerr << "Error creating SDL window." << std::endl;
+        Logger::Error("Error creating SDL window.");
         return;
     }
 
@@ -45,7 +47,7 @@ void Game::Initialize() {
     );
 
     if (!renderer) {
-        std::cerr << "Error creating SDL renderer." << std::endl;
+        Logger::Error("Error creating SDL renderer.");
         return;
     }
 
@@ -80,6 +82,7 @@ void Game::Setup() {
 
 void Game::Update() {
     int timeToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPreviuosFrame);
+
     if (timeToWait > 0 && timeToWait <= MILLISECONDS_PER_FRAME) {
         SDL_Delay(timeToWait);
     }

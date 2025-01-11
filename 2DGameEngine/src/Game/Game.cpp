@@ -7,7 +7,7 @@
 #include "../Logger/Logger.h"
 
 Game::Game() {
-    isRuning = false;
+    m_isRuning = false;
     Logger::Success("Game Constructor Called!");
 }
 
@@ -27,7 +27,7 @@ void Game::Initialize() {
     windowWidth = displayMode.w;
     windowHeight = displayMode.h;
 
-    window = SDL_CreateWindow(
+    m_window = SDL_CreateWindow(
         "2DGameEngine",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
@@ -36,25 +36,25 @@ void Game::Initialize() {
         SDL_WINDOW_BORDERLESS
     );
 
-    if (!window) {
+    if (!m_window) {
         Logger::Error("Error creating SDL window.");
         return;
     }
 
-    renderer = SDL_CreateRenderer(
-        window,
+    m_renderer = SDL_CreateRenderer(
+        m_window,
         -1,
         SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
     );
 
-    if (!renderer) {
+    if (!m_renderer) {
         Logger::Error("Error creating SDL renderer.");
         return;
     }
 
-    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+    SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN);
 
-    isRuning = true;
+    m_isRuning = true;
 }
 
 void Game::ProcessInput() {
@@ -62,11 +62,11 @@ void Game::ProcessInput() {
     while (SDL_PollEvent(&sdlEvent)) {
         switch (sdlEvent.type) {
             case SDL_QUIT:
-                isRuning = false;
+                m_isRuning = false;
                 break;
             case SDL_KEYDOWN:
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) {
-                    isRuning = false;
+                    m_isRuning = false;
                 }
                 break;
         }
@@ -82,15 +82,15 @@ void Game::Setup() {
 }
 
 void Game::Update() {
-    int timeToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPreviuosFrame);
+    int timeToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - m_millisecondsPreviuosFrame);
 
     if (timeToWait > 0 && timeToWait <= MILLISECONDS_PER_FRAME) {
         SDL_Delay(timeToWait);
     }
 
-    double deltaTime = (SDL_GetTicks() - millisecondsPreviuosFrame) / 1000.0;
+    double deltaTime = (SDL_GetTicks() - m_millisecondsPreviuosFrame) / 1000.0;
 
-    millisecondsPreviuosFrame = SDL_GetTicks();
+    m_millisecondsPreviuosFrame = SDL_GetTicks();
 
     // TODO:
     // MovementSystem.Update();
@@ -98,17 +98,17 @@ void Game::Update() {
 }
 
 void Game::Render() {
-    SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
-    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
+    SDL_RenderClear(m_renderer);
 
     // TODO: Render Game objects
 
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(m_renderer);
 }
 
 void Game::Run() {
     Setup();
-    while (isRuning) {
+    while (m_isRuning) {
         ProcessInput();
         Update();
         Render();
@@ -116,7 +116,7 @@ void Game::Run() {
 }
 
 void Game::Destroy() {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(m_renderer);
+    SDL_DestroyWindow(m_window);
     SDL_Quit();
 }

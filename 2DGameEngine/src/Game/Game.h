@@ -8,10 +8,10 @@ const int MILLISECONDS_PER_FRAME = 1000 / FPS;
 
 class Game {
 	private:
-		bool isRuning;
-		int millisecondsPreviuosFrame = 0;
-		SDL_Window* window;
-		SDL_Renderer* renderer;
+		bool m_isRuning;
+		int m_millisecondsPreviuosFrame = 0;
+		SDL_Window* m_window;
+		SDL_Renderer* m_renderer;
 
 	public:
 		Game();

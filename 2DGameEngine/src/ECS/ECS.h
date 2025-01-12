@@ -28,6 +28,12 @@ class Entity {
 	public:
 		Entity(int id): m_id(id) {};
 		int GetId() const;
+
+		Entity& operator =(const Entity& other) = default;
+		bool operator ==(const Entity& other) const { return m_id == other.m_id; }
+		bool operator !=(const Entity& other) const { return m_id != other.m_id; }
+		bool operator >(const Entity& other) const { return m_id > other.m_id; }
+		bool operator <(const Entity& other) const { return m_id < other.m_id; }
 };
 
 class System {
@@ -39,10 +45,10 @@ class System {
 		System() = default;
 		~System() = default;
 
-		void AddEntityToSystem(Entity m_entity);
-		void RemoveEntityToSystem(Entity m_entity);
+		void AddEntityToSystem(Entity entity);
+		void RemoveEntityToSystem(Entity entity);
 		std::vector<Entity> GetSystemEntities() const;
-		Signature& GetComponentSignature() const;
+		const Signature& GetComponentSignature() const;
 
 		template <typename TComponent> void RequireComponent();
 };

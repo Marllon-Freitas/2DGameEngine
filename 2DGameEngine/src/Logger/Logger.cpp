@@ -50,7 +50,7 @@ void Logger::Warning(const std::string& message) {
 
 void Logger::Log(const std::string& message) {
     LogEntry logEntry;
-    logEntry.type = LOG_DEFAULT; //
+    logEntry.type = LOG_DEFAULT;
     logEntry.message = "LOG: [" + CurrentDateTimeToString() + "]: " + message;
     std::cout << "\x1B[37m" << logEntry.message << "\033[0m" << std::endl;
     messages.push_back(logEntry);

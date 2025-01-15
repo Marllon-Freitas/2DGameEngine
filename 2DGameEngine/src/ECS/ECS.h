@@ -98,6 +98,7 @@ class Registry {
 		Entity CreateEntity();
 		template <typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
 		template <typename TComponent> void RemoveComponent(Entity entity);
+		template <typename TComponent> void HasComponent(Entity entity);
 };
 
 template <typename TComponent>
@@ -139,6 +140,14 @@ void Registry::RemoveComponent(Entity entity) {
 	const auto entityId = entity.GetId();
 
 	m_entityComponentSignatures[entityId].set(componentId, false);
+}
+
+template <typename TComponent>
+void Registry::HasComponent(Entity entity) {
+	const auto componentId = Component<TComponent>::GetId();
+	const auto entityId = entity.GetId();
+
+	return m_entityComponentSignatures[entityId].test(componentId);
 }
 
 #endif 

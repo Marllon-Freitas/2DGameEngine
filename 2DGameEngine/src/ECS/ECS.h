@@ -6,6 +6,9 @@
 #include <unordered_map>
 #include <typeindex>
 #include <set>
+#include <memory>
+
+#include "../Logger/Logger.h"
 
 const unsigned int MAX_COMPONENTS = 32;
 
@@ -86,14 +89,18 @@ class Pool: public IPool {
 class Registry {
 	private:
 		int m_numOfEntities = 0;
-		std::vector<IPool*> m_componentPools;	
+		std::vector<std::shared_ptr<IPool>> m_componentPools;	
 		std::vector<Signature> m_entityComponentSignatures;
-		std::unordered_map<std::type_index, System*> m_systems;
+		std::unordered_map<std::type_index, std::shared_ptr<System>> m_systems;
 		std::set<Entity> m_entitiesToBeAdded;
 		std::set<Entity> m_entitiesToBeKilled;
 
 	public:
-		Registry() = default;
+		Registry() {
+			Logger::Warning("Game Registry Created");
+		};
+
+		void Update();
 
 		// Entity management
 		Entity CreateEntity();
@@ -123,11 +130,11 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
 	}
 
 	if (!m_componentPools[componentId]) {
-		Pool<TComponent>* newComponentPool = new Pool<TComponent>();
+		std::shared_ptr<Pool<TComponent>> newComponentPool = std::make_shared<Pool<TComponent>>();
 		m_componentPools[componentId] = newComponentPool;
 	}
 
-	Pool<TComponent>* componentPool = m_componentPools[componentId];
+	std::shared_ptr<Pool<TComponent>> componentPool = std::static_pointer_cast<Pool<TComponent>>(m_componentPools[componentId]);
 
 	if (entityId >= componentPool->GetSize()) {
 		componentPool->Resize(m_numOfEntities);
@@ -165,7 +172,7 @@ void System::RequireComponent() {
 
 template <typename TSystem, typename ...TArgs> 
 void Registry::AddSystem(TArgs&& ...args) {
-	TSystem* newSystem(new TSystem(std::forward<TArgs>(args)...));
+	std::shared_ptr<TSystem> newSystem = std::make_shared<TSystem>(std::forward<TArgs>(args)...);
 	m_systems.insert(std::make_pair(std::type_index(typeid(TSystem)), newSystem));
 }
 

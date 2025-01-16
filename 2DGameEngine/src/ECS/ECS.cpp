@@ -30,6 +30,7 @@ Entity Registry::CreateEntity() {
 	entityId = m_numOfEntities++;
 
 	Entity entity(entityId);
+	entity.registry = this;
 	m_entitiesToBeAdded.insert(entity);
 
 	if (entityId >= m_entityComponentSignatures.size()) {

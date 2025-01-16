@@ -79,8 +79,9 @@ void Game::ProcessInput() {
 void Game::Setup() {
     Entity tank = m_registry->CreateEntity();
 
-    m_registry->AddComponent<TransformComponent>(tank, glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
-    m_registry->AddComponent<RigidBodyComponent>(tank, glm::vec2(50.0, 0.0));
+    tank.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
+    tank.AddComponent<RigidBodyComponent>(glm::vec2(50.0, 0.0));
+    tank.RemoveComponent<TransformComponent>();
 }
 
 void Game::Update() {

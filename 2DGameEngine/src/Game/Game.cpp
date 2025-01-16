@@ -7,6 +7,7 @@
 #include "../Logger/Logger.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/RigidBodyComponent.h"
+#include "../Systems/MovementSystem.h"
 
 Game::Game() {
     m_isRuning = false;
@@ -77,11 +78,12 @@ void Game::ProcessInput() {
 }
 
 void Game::Setup() {
+    m_registry->AddSystem<MovementSystem>();
+
     Entity tank = m_registry->CreateEntity();
 
     tank.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
-    tank.AddComponent<RigidBodyComponent>(glm::vec2(50.0, 0.0));
-    tank.RemoveComponent<TransformComponent>();
+    tank.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 50.0));
 }
 
 void Game::Update() {
@@ -95,9 +97,11 @@ void Game::Update() {
 
     m_millisecondsPreviuosFrame = SDL_GetTicks();
 
-    // TODO:
-    // MovementSystem.Update();
-    // CollisionSystem.Update();
+    // update the registry to process entities that are waiting to be created/deleted
+    m_registry->Update();
+
+    // update all the systems
+    m_registry->GetSystem<MovementSystem>().Update(deltaTime);
 }
 
 void Game::Render() {

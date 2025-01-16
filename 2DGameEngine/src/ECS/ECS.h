@@ -186,7 +186,7 @@ TComponent& Registry::GetComponent(Entity entity) const {
 	const auto entityId = entity.GetId();
 	auto componentPool = std::static_pointer_cast<Pool<TComponent>>(m_componentPools[componentId]);
 
-	return componentPool->Get();
+	return componentPool->Get(entityId);
 }
 
 // System management

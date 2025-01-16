@@ -21,10 +21,11 @@ struct IComponent {
 
 template <typename T>
 class Component: public IComponent {
-	static int GetId() {
-		static auto id = nextId++;
-		return id;
-	}
+	public:
+		static int GetId() {
+			static auto id = nextId++;
+			return id;
+		}
 };
 
 class Entity {
@@ -97,7 +98,11 @@ class Registry {
 
 	public:
 		Registry() {
-			Logger::Warning("Game Registry Created");
+			Logger::Info("Game Registry Created");
+		};
+
+		~Registry() {
+			Logger::Info("Game Registry deleted");
 		};
 
 		void Update();
@@ -125,7 +130,7 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
 	const auto componentId = Component<TComponent>::GetId();
 	const auto entityId = entity.GetId();
 
-	if (componentId >= m_componentPools.size) {
+	if (componentId >= m_componentPools.size()) {
 		m_componentPools.resize(componentId + 1, nullptr);
 	}
 
@@ -145,6 +150,8 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
 	componentPool->Set(entityId, newComponent);
 
 	m_entityComponentSignatures[entityId].set(componentId);
+
+	Logger::Info("Component id = " + std::to_string(componentId) + " was added to entity: " + std::to_string(entityId));
 }
 
 template <typename TComponent>

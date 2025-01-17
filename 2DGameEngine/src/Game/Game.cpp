@@ -5,9 +5,13 @@
 #include "Game.h"
 #include "../ECS/ECS.h"
 #include "../Logger/Logger.h"
+
 #include "../Components/TransformComponent.h"
 #include "../Components/RigidBodyComponent.h"
+#include "../Components/SpriteComponent.h"
+
 #include "../Systems/MovementSystem.h"
+#include "../Systems/RenderSystem.h"
 
 Game::Game() {
     m_isRuning = false;
@@ -79,11 +83,19 @@ void Game::ProcessInput() {
 
 void Game::Setup() {
     m_registry->AddSystem<MovementSystem>();
+    m_registry->AddSystem<RenderSystem>();
 
     Entity tank = m_registry->CreateEntity();
 
     tank.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
     tank.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 50.0));
+    tank.AddComponent<SpriteComponent>(10, 10);
+
+    Entity truck = m_registry->CreateEntity();
+
+    truck.AddComponent<TransformComponent>(glm::vec2(5.0, 30.0), glm::vec2(2.0, 1.0), 0.0);
+    truck.AddComponent<RigidBodyComponent>(glm::vec2(50.0, 50.0));
+    truck.AddComponent<SpriteComponent>(30, 10);
 }
 
 void Game::Update() {
@@ -108,7 +120,7 @@ void Game::Render() {
     SDL_SetRenderDrawColor(m_renderer, 21, 21, 21, 255);
     SDL_RenderClear(m_renderer);
 
-    // TODO: Render Game objects
+    m_registry->GetSystem<RenderSystem>().Update(m_renderer);
 
     SDL_RenderPresent(m_renderer);
 }

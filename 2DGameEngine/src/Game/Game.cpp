@@ -11,9 +11,11 @@
 #include "../Components/TransformComponent.h"
 #include "../Components/RigidBodyComponent.h"
 #include "../Components/SpriteComponent.h"
+#include "../Components/AnimationComponent.h"
 
 #include "../Systems/MovementSystem.h"
 #include "../Systems/RenderSystem.h"
+#include "../Systems/AnimationSystem.h"
 
 Game::Game() {
     m_isRuning = false;
@@ -71,9 +73,11 @@ void Game::Initialize() {
 void Game::LoadLevel(int level) {
     m_registry->AddSystem<MovementSystem>();
     m_registry->AddSystem<RenderSystem>();
+    m_registry->AddSystem<AnimationSystem>();
 
     m_assetManager->AddTexture("tank-image", "./assets/images/tank-panther-right.png", m_renderer);
     m_assetManager->AddTexture("truck-image", "./assets/images/truck-ford-right.png", m_renderer);
+    m_assetManager->AddTexture("chopper-image", "./assets/images/chopper.png", m_renderer);
     m_assetManager->AddTexture("tilemap-image", "./assets/tilemaps/jungle.png", m_renderer);
 
     int tileSize = 32;
@@ -106,15 +110,22 @@ void Game::LoadLevel(int level) {
 
     Entity tank = m_registry->CreateEntity();
 
-    tank.AddComponent<TransformComponent>(glm::vec2(4.0, 0.0), glm::vec2(3.0, 3.0), 0.0);
-    tank.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 0.0));
+    tank.AddComponent<TransformComponent>(glm::vec2(60.0, 45.0), glm::vec2(3.0, 3.0), 0.0);
+    tank.AddComponent<RigidBodyComponent>(glm::vec2(40.0, 0.0));
     tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1);
 
     Entity truck = m_registry->CreateEntity();
 
-    truck.AddComponent<TransformComponent>(glm::vec2(4.0, 0.0), glm::vec2(3.0, 3.0), 0.0);
-    truck.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 0.0));
+    truck.AddComponent<TransformComponent>(glm::vec2(100.0, 100.0), glm::vec2(3.0, 3.0), 0.0);
+    truck.AddComponent<RigidBodyComponent>(glm::vec2(40.0, 0.0));
     truck.AddComponent<SpriteComponent>("truck-image", 32, 32, 2);
+
+    Entity chopper = m_registry->CreateEntity();
+
+    chopper.AddComponent<TransformComponent>(glm::vec2(10.0, 00.0), glm::vec2(3.0, 3.0), 0.0);
+    chopper.AddComponent<RigidBodyComponent>(glm::vec2(60.0, 0.0));
+    chopper.AddComponent<SpriteComponent>("chopper-image", 32, 32, 3);
+    chopper.AddComponent<AnimationComponent>(2, 12, true);
 }
 
 void Game::ProcessInput() {
@@ -153,6 +164,7 @@ void Game::Update() {
 
     // update all the systems
     m_registry->GetSystem<MovementSystem>().Update(deltaTime);
+    m_registry->GetSystem<AnimationSystem>().Update();
 }
 
 void Game::Render() {

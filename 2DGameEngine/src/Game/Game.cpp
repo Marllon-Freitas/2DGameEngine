@@ -18,9 +18,11 @@
 #include "../Systems/RenderSystem.h"
 #include "../Systems/AnimationSystem.h"
 #include "../Systems/CollisionSystem.h"
+#include "../Systems/RenderColliderSystem.h"
 
 Game::Game() {
     m_isRuning = false;
+    m_isDebug = false;
     m_registry = std::make_unique<Registry>();
     m_assetManager = std::make_unique<AssetManager>();
     Logger::Success("Game Constructor Called!");
@@ -77,6 +79,8 @@ void Game::LoadLevel(int level) {
     m_registry->AddSystem<RenderSystem>();
     m_registry->AddSystem<AnimationSystem>();
     m_registry->AddSystem<CollisionSystem>();
+    m_registry->AddSystem<RenderColliderSystem>();
+
 
     m_assetManager->AddTexture("tank-image", "./assets/images/tank-panther-right.png", m_renderer);
     m_assetManager->AddTexture("truck-image", "./assets/images/truck-ford-right.png", m_renderer);
@@ -127,10 +131,12 @@ void Game::LoadLevel(int level) {
 
     Entity chopper = m_registry->CreateEntity();
 
-    chopper.AddComponent<TransformComponent>(glm::vec2(010.0, 100.0), glm::vec2(3.0, 3.0), 0.0);
+    chopper.AddComponent<TransformComponent>(glm::vec2(010.0, 100.0), glm::vec2(1.0, 1.0), 0.0);
     chopper.AddComponent<RigidBodyComponent>(glm::vec2(60.0, 0.0));
     chopper.AddComponent<SpriteComponent>("chopper-image", 32, 32, 3);
     chopper.AddComponent<AnimationComponent>(2, 12, true);
+    chopper.AddComponent<BoxColliderComponent>(32, 32);
+
 }
 
 void Game::ProcessInput() {
@@ -143,6 +149,9 @@ void Game::ProcessInput() {
             case SDL_KEYDOWN:
                 if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) {
                     m_isRuning = false;
+                }
+                if (sdlEvent.key.keysym.sym == SDLK_d) {
+                    m_isDebug = !m_isDebug;
                 }
                 break;
         }
@@ -178,6 +187,9 @@ void Game::Render() {
     SDL_RenderClear(m_renderer);
 
     m_registry->GetSystem<RenderSystem>().Update(m_renderer, m_assetManager);
+    if (m_isDebug) {
+        m_registry->GetSystem<RenderColliderSystem>().Update(m_renderer);
+    }
 
     SDL_RenderPresent(m_renderer);
 }

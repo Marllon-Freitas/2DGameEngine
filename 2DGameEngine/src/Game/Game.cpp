@@ -81,7 +81,6 @@ void Game::LoadLevel(int level) {
     m_registry->AddSystem<CollisionSystem>();
     m_registry->AddSystem<RenderColliderSystem>();
 
-
     m_assetManager->AddTexture("tank-image", "./assets/images/tank-panther-right.png", m_renderer);
     m_assetManager->AddTexture("truck-image", "./assets/images/truck-ford-right.png", m_renderer);
     m_assetManager->AddTexture("chopper-image", "./assets/images/chopper.png", m_renderer);

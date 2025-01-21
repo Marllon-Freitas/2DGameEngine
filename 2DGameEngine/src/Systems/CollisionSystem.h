@@ -43,6 +43,8 @@ public:
 
 				if (isCollisionHappened) {
 					Logger::Success("Entity " + std::to_string(a.GetId()) + " is coliding with entity " + std::to_string(b.GetId()));
+					a.Kill();
+					b.Kill();
 				}
 			}
 		}

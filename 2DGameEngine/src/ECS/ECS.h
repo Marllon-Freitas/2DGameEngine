@@ -7,6 +7,7 @@
 #include <typeindex>
 #include <set>
 #include <memory>
+#include <deque>
 
 #include "../Logger/Logger.h"
 
@@ -34,8 +35,11 @@ class Entity {
 
 	public:
 		Entity(int id): m_id(id) {};
-		int GetId() const;
+		Entity(const Entity& entity) = default;
 
+		int GetId() const;
+		void Kill();
+		
 		Entity& operator =(const Entity& other) = default;
 		bool operator ==(const Entity& other) const { return m_id == other.m_id; }
 		bool operator !=(const Entity& other) const { return m_id != other.m_id; }
@@ -60,7 +64,7 @@ class System {
 		~System() = default;
 
 		void AddEntityToSystem(Entity entity);
-		void RemoveEntityToSystem(Entity entity);
+		void RemoveEntityFromSystem(Entity entity);
 		std::vector<Entity> GetSystemEntities() const;
 		const Signature& GetComponentSignature() const;
 
@@ -102,6 +106,7 @@ class Registry {
 		std::unordered_map<std::type_index, std::shared_ptr<System>> m_systems;
 		std::set<Entity> m_entitiesToBeAdded;
 		std::set<Entity> m_entitiesToBeKilled;
+		std::deque<int> m_freeIds;
 
 	public:
 		Registry() {
@@ -116,6 +121,7 @@ class Registry {
 
 		// Entity management
 		Entity CreateEntity();
+		void KillEntity(Entity entity);
 
 		// Component management
 		template <typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
@@ -130,6 +136,7 @@ class Registry {
 		template <typename TSystem> TSystem& GetSystem() const;
 
 		void AddEntityToSystems(Entity entity);
+		void RemoveEntityFromSystems(Entity entity);
 };
 
 // Component management

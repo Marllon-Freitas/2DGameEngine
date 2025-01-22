@@ -20,6 +20,7 @@
 #include "../Systems/CollisionSystem.h"
 #include "../Systems/RenderColliderSystem.h"
 #include "../Systems/DamageSystem.h"
+#include "../Systems/KeyBoardControlSystem.h"
 
 Game::Game() {
     m_isRuning = false;
@@ -83,6 +84,7 @@ void Game::LoadLevel(int level) {
     m_registry->AddSystem<CollisionSystem>();
     m_registry->AddSystem<RenderColliderSystem>();
     m_registry->AddSystem<DamageSystem>();
+    m_registry->AddSystem<KeyboardControlSystem>();
 
     m_assetManager->AddTexture("tank-image", "./assets/images/tank-panther-right.png", m_renderer);
     m_assetManager->AddTexture("truck-image", "./assets/images/truck-ford-right.png", m_renderer);
@@ -155,6 +157,7 @@ void Game::ProcessInput() {
                 if (sdlEvent.key.keysym.sym == SDLK_d) {
                     m_isDebug = !m_isDebug;
                 }
+                m_eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
                 break;
         }
     }
@@ -178,6 +181,7 @@ void Game::Update() {
     m_eventBus->Reset();
 
     m_registry->GetSystem<DamageSystem>().SubscribeToEvents(m_eventBus);
+    m_registry->GetSystem<KeyboardControlSystem>().SubscribeToEvents(m_eventBus);
 
     // update the registry to process entities that are waiting to be created/deleted
     m_registry->Update();

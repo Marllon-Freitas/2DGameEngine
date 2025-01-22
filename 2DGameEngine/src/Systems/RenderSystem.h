@@ -14,7 +14,7 @@ class RenderSystem : public System {
 		RenderSystem() {
 			RequireComponent<TransformComponent>();
 			RequireComponent<SpriteComponent>();
-		};
+		}
 
 		void Update(SDL_Renderer* renderer, std::unique_ptr<AssetManager>& assetManager) {
 			struct RenderableEntity {
@@ -58,7 +58,7 @@ class RenderSystem : public System {
 					SDL_FLIP_NONE
 				);
 
-			};
+			}
 		};
 };
 

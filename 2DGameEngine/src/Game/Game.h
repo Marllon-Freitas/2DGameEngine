@@ -5,6 +5,7 @@
 
 #include "../ECS/ECS.h"
 #include "../AssetManager/AssetManager.h"
+#include "../EventBus/EventBus.h"
 
 const int FPS = 60;
 const int MILLISECONDS_PER_FRAME = 1000 / FPS;

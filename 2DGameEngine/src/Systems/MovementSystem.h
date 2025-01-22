@@ -10,7 +10,7 @@ class MovementSystem: public System {
 		MovementSystem() {
 			RequireComponent<TransformComponent>();
 			RequireComponent<RigidBodyComponent>();
-		};
+		}
 
 		void Update(double deltaTime) {
 			for (auto& entity : GetSystemEntities()) {
@@ -20,7 +20,7 @@ class MovementSystem: public System {
 				transform.position.x += rigidBody.velocity.x * deltaTime;
 				transform.position.y += rigidBody.velocity.y * deltaTime;
 			}
-		};
+		}
 };
 
 #endif

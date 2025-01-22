@@ -13,7 +13,7 @@ class CollisionEvent: public Event {
         CollisionEvent(Entity entityA, Entity entityB)
             : entityA(entityA), entityB(entityB) {}
 
-        ~CollisionEvent();
+        ~CollisionEvent() = default;
 };
 
 #endif

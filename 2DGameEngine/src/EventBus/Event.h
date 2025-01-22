@@ -2,8 +2,8 @@
 #define EVENT_H
 
 class Event {
-public:
-    Event() = default;
+    public:
+        Event() = default;
 };
 
 #endif

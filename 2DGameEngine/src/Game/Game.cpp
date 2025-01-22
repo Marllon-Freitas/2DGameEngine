@@ -19,12 +19,14 @@
 #include "../Systems/AnimationSystem.h"
 #include "../Systems/CollisionSystem.h"
 #include "../Systems/RenderColliderSystem.h"
+#include "../Systems/DamageSystem.h"
 
 Game::Game() {
     m_isRuning = false;
     m_isDebug = false;
     m_registry = std::make_unique<Registry>();
     m_assetManager = std::make_unique<AssetManager>();
+    m_eventBus = std::make_unique<EventBus>();
     Logger::Success("Game Constructor Called!");
 }
 
@@ -80,6 +82,7 @@ void Game::LoadLevel(int level) {
     m_registry->AddSystem<AnimationSystem>();
     m_registry->AddSystem<CollisionSystem>();
     m_registry->AddSystem<RenderColliderSystem>();
+    m_registry->AddSystem<DamageSystem>();
 
     m_assetManager->AddTexture("tank-image", "./assets/images/tank-panther-right.png", m_renderer);
     m_assetManager->AddTexture("truck-image", "./assets/images/truck-ford-right.png", m_renderer);
@@ -172,13 +175,17 @@ void Game::Update() {
 
     m_millisecondsPreviuosFrame = SDL_GetTicks();
 
+    m_eventBus->Reset();
+
+    m_registry->GetSystem<DamageSystem>().SubscribeToEvents(m_eventBus);
+
     // update the registry to process entities that are waiting to be created/deleted
     m_registry->Update();
 
     // update all the systems
     m_registry->GetSystem<MovementSystem>().Update(deltaTime);
     m_registry->GetSystem<AnimationSystem>().Update();
-    m_registry->GetSystem<CollisionSystem>().Update();
+    m_registry->GetSystem<CollisionSystem>().Update(m_eventBus);
 }
 
 void Game::Render() {

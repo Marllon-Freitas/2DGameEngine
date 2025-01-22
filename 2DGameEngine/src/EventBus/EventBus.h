@@ -56,6 +56,10 @@ class EventBus {
             Logger::Info("EventBus destructor Called!");
         }
 
+        void Reset() {
+            m_subscribers.clear();
+        }
+
         template <typename TEvent, typename TOwner>
         void SubscribeToEvent(TOwner* ownerInstance, void (TOwner::*callbackFunction)(TEvent&)) {
             if (!m_subscribers[typeid(TEvent)].get()) {

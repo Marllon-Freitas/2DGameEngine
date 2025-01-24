@@ -13,6 +13,7 @@
 #include "../Components/SpriteComponent.h"
 #include "../Components/AnimationComponent.h"
 #include "../Components/BoxColliderComponent.h"
+#include "../Components/KeyboardControlComponent.h"
 
 #include "../Systems/MovementSystem.h"
 #include "../Systems/RenderSystem.h"
@@ -88,7 +89,7 @@ void Game::LoadLevel(int level) {
 
     m_assetManager->AddTexture("tank-image", "./assets/images/tank-panther-right.png", m_renderer);
     m_assetManager->AddTexture("truck-image", "./assets/images/truck-ford-right.png", m_renderer);
-    m_assetManager->AddTexture("chopper-image", "./assets/images/chopper.png", m_renderer);
+    m_assetManager->AddTexture("chopper-image", "./assets/images/chopper-spritesheet.png", m_renderer);
     m_assetManager->AddTexture("tilemap-image", "./assets/tilemaps/jungle.png", m_renderer);
 
     int tileSize = 32;
@@ -135,11 +136,17 @@ void Game::LoadLevel(int level) {
 
     Entity chopper = m_registry->CreateEntity();
 
-    chopper.AddComponent<TransformComponent>(glm::vec2(010.0, 100.0), glm::vec2(1.0, 1.0), 0.0);
-    chopper.AddComponent<RigidBodyComponent>(glm::vec2(60.0, 0.0));
+    chopper.AddComponent<TransformComponent>(glm::vec2(10.0, 100.0), glm::vec2(3.0, 3.0), 0.0);
+    chopper.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     chopper.AddComponent<SpriteComponent>("chopper-image", 32, 32, 3);
     chopper.AddComponent<AnimationComponent>(2, 12, true);
-    chopper.AddComponent<BoxColliderComponent>(32, 32);
+    chopper.AddComponent<BoxColliderComponent>(32 * 3, 32 * 3);
+    chopper.AddComponent<KeyboardControlComponent>(
+        glm::vec2(0, -60),
+        glm::vec2(60, 0),
+        glm::vec2(0, 60),
+        glm::vec2(-60, 0)
+    );
 
 }
 

@@ -220,7 +220,7 @@ void Game::Render() {
 
     m_registry->GetSystem<RenderSystem>().Update(m_renderer, m_assetManager, m_camera);
     if (m_isDebug) {
-        m_registry->GetSystem<RenderColliderSystem>().Update(m_renderer);
+        m_registry->GetSystem<RenderColliderSystem>().Update(m_renderer, m_camera);
     }
 
     SDL_RenderPresent(m_renderer);

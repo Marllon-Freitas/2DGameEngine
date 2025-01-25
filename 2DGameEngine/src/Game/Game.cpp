@@ -125,7 +125,7 @@ void Game::LoadLevel(int level) {
 
             Entity tile = m_registry->CreateEntity();
             tile.AddComponent<TransformComponent>(glm::vec2(x * (tileScale * tileSize), y * (tileScale * tileSize)), glm::vec2(tileScale, tileScale), 0.0);
-            tile.AddComponent<SpriteComponent>("tilemap-image", tileSize, tileSize, 0, srcRectX, srcRectY);
+            tile.AddComponent<SpriteComponent>("tilemap-image", tileSize, tileSize, 0, false, srcRectX, srcRectY);
         }
     }
     mapFile.close();
@@ -136,8 +136,8 @@ void Game::LoadLevel(int level) {
     Entity tank = m_registry->CreateEntity();
 
     tank.AddComponent<TransformComponent>(glm::vec2(340.0, 10.0), glm::vec2(1.0, 1.0), 0.0);
-    tank.AddComponent<RigidBodyComponent>(glm::vec2(-30.0, 0.0));
-    tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1);
+    tank.AddComponent<RigidBodyComponent>(glm::vec2(30.0, 0.0));
+    tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1, true);
     tank.AddComponent<BoxColliderComponent>(32, 32);
 
     Entity truck = m_registry->CreateEntity();
@@ -154,13 +154,13 @@ void Game::LoadLevel(int level) {
     chopper.AddComponent<SpriteComponent>("chopper-image", 32, 32, 3);
     chopper.AddComponent<AnimationComponent>(2, 12, true);
     chopper.AddComponent<BoxColliderComponent>(32, 32);
+    chopper.AddComponent<CameraFollowComponent>();
     chopper.AddComponent<KeyboardControlComponent>(
         glm::vec2(0, -100),
         glm::vec2(100, 0),
         glm::vec2(0, 100),
         glm::vec2(-100, 0)
     );
-    chopper.AddComponent<CameraFollowComponent>();
 
 }
 

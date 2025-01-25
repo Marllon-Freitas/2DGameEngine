@@ -16,7 +16,7 @@ class RenderSystem : public System {
 			RequireComponent<SpriteComponent>();
 		}
 
-		void Update(SDL_Renderer* renderer, std::unique_ptr<AssetManager>& assetManager) {
+		void Update(SDL_Renderer* renderer, std::unique_ptr<AssetManager>& assetManager, SDL_Rect& camera) {
 			struct RenderableEntity {
 				TransformComponent transformComponent;
 				SpriteComponent spriteComponent;
@@ -42,8 +42,8 @@ class RenderSystem : public System {
 				SDL_Rect sourceRectangle = sprite.srcRect;
 
 				SDL_Rect destinationRectangle = {
-					static_cast<int>(transform.position.x),
-					static_cast<int>(transform.position.y),
+					static_cast<int>(transform.position.x - camera.x),
+					static_cast<int>(transform.position.y - camera.y),
 					static_cast<int>(sprite.width * transform.scale.x),
 					static_cast<int>(sprite.height * transform.scale.y)
 				};

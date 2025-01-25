@@ -17,6 +17,7 @@ class Game {
 		int m_millisecondsPreviuosFrame = 0;
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;
+		SDL_Rect m_camera;
 
 		std::unique_ptr<Registry> m_registry;
 		std::unique_ptr<AssetManager> m_assetManager;
@@ -35,7 +36,9 @@ class Game {
 		void Destroy();
 		void LoadLevel(int level);
 
-		int windowWidth;
-		int windowHeight;
+		static int windowWidth;
+		static int windowHeight;
+		static int mapWidth;
+		static int mapHeight;
 };
 #endif

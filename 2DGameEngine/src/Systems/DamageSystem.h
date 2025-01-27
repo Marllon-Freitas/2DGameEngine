@@ -21,8 +21,6 @@ class DamageSystem : public System {
 
 		void onCollision(CollisionEvent& event) {
 			Logger::Log("The Damage System received an event collision between enities " + std::to_string(event.entityA.GetId()) + " and " + std::to_string(event.entityB.GetId()));
-			event.entityA.Kill();
-			event.entityB.Kill();
 		}
 
 		void Update(std::unique_ptr<EventBus>& eventBus) {

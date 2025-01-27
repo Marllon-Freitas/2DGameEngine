@@ -126,7 +126,7 @@ class Registry {
 		// Component management
 		template <typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
 		template <typename TComponent> void RemoveComponent(Entity entity);
-		template <typename TComponent> void HasComponent(Entity entity) const;
+		template <typename TComponent> bool HasComponent(Entity entity) const;
 		template <typename TComponent> TComponent& GetComponent(Entity entity) const;
 		
 		// System management
@@ -180,7 +180,7 @@ void Registry::RemoveComponent(Entity entity) {
 }
 
 template <typename TComponent>
-void Registry::HasComponent(Entity entity) const {
+bool Registry::HasComponent(Entity entity) const {
 	const auto componentId = Component<TComponent>::GetId();
 	const auto entityId = entity.GetId();
 

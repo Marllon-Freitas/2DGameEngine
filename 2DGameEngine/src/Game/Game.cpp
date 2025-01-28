@@ -27,6 +27,7 @@
 #include "../Systems/KeyBoardControlSystem.h"
 #include "../Systems/CameraMovementSystem.h"
 #include "../Systems/ProjectileEmitSystem.h"
+#include "../Systems/ProjectileLifeCycleSystem.h"
 
 int Game::windowWidth;
 int Game::windowHeight;
@@ -100,6 +101,7 @@ void Game::LoadLevel(int level) {
     m_registry->AddSystem<KeyboardControlSystem>();
     m_registry->AddSystem<CameraMovementSystem>();
     m_registry->AddSystem<ProjectileEmitSystem>();
+    m_registry->AddSystem<ProjectileLifeCycleSystem>();
 
     m_assetManager->AddTexture("tank-image", "./assets/images/tank-panther-right.png", m_renderer);
     m_assetManager->AddTexture("truck-image", "./assets/images/truck-ford-right.png", m_renderer);
@@ -148,7 +150,7 @@ void Game::LoadLevel(int level) {
     tank.AddComponent<ProjectileEmitterComponent>(
         glm::vec2(100.0, 100.0),
         500,
-        10000,
+        1000,
         0,
         false
     );
@@ -235,6 +237,7 @@ void Game::Update() {
     m_registry->GetSystem<CollisionSystem>().Update(m_eventBus);
     m_registry->GetSystem<CameraMovementSystem>().Update(m_camera);
     m_registry->GetSystem<ProjectileEmitSystem>().Update(m_registry);
+    m_registry->GetSystem<ProjectileLifeCycleSystem>().Update();
 }
 
 void Game::Render() {

@@ -398,6 +398,7 @@
     <ClInclude Include="src\AssetManager\AssetManager.h" />
     <ClInclude Include="src\Components\AnimationComponent.h" />
     <ClInclude Include="src\Components\CameraFollowComponent.h" />
+    <ClInclude Include="src\Components\HealthComponent.h" />
     <ClInclude Include="src\Components\KeyboardControlComponent.h" />
     <ClInclude Include="src\Components\ProjectileEmitterComponent.h" />
     <ClInclude Include="src\Components\RigidBodyComponent.h" />

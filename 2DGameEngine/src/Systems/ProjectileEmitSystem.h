@@ -19,7 +19,7 @@ public:
 
 	void Update(std::unique_ptr<Registry>& registry) {
 		for (auto& entity : GetSystemEntities()) {
-			const auto transform = entity.GetComponent<TransformComponent>();
+            const auto& transform = entity.GetComponent<TransformComponent>();
 			auto& projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
 
             if (SDL_GetTicks() - projectileEmitter.lastEmissionTime > projectileEmitter.repeatFrequency) {

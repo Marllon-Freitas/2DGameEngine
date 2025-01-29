@@ -147,6 +147,7 @@ void Game::LoadLevel(int level) {
     tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1, true);
     tank.AddComponent<BoxColliderComponent>(32, 32);
     tank.AddComponent<HealthComponent>(100);
+    tank.AddComponent<CameraFollowComponent>();
     tank.AddComponent<ProjectileEmitterComponent>(
         glm::vec2(100.0, 100.0),
         500,
@@ -184,6 +185,13 @@ void Game::LoadLevel(int level) {
         glm::vec2(100, 0),
         glm::vec2(0, 100),
         glm::vec2(-100, 0)
+    );
+    chopper.AddComponent<ProjectileEmitterComponent>(
+        glm::vec2(150.0, 150.0),
+        0,
+        10000,
+        0,
+        true
     );
 
 }
@@ -227,6 +235,7 @@ void Game::Update() {
 
     m_registry->GetSystem<DamageSystem>().SubscribeToEvents(m_eventBus);
     m_registry->GetSystem<KeyboardControlSystem>().SubscribeToEvents(m_eventBus);
+    m_registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(m_eventBus);
 
     // update the registry to process entities that are waiting to be created/deleted
     m_registry->Update();
